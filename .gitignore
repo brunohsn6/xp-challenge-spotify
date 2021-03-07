@@ -1,0 +1,13 @@
+# binaries
+build/
+dist/
+
+# editors
+.vscode/
+
+# node
+
+node_modules/
+npm-debug.log*
+.tsbuildinfo
+
