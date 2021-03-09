@@ -18,6 +18,10 @@ input {
     &.big {
         font-size: $bigFontSize;
     }
+    &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 40px $backgroundBlack inset;
+        -webkit-text-fill-color: $white !important;
+    }
 }
 .span-outline {
     display: inline-block;

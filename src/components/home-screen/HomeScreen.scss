@@ -4,4 +4,22 @@
     .header {
         padding-top: 1em;
     }
+    .content {
+        display: flex;
+        height: 10em;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding-bottom: 2em;
+        overflow: hidden;
+        .desc-section {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            .img,
+            .desc {
+                display: flex;
+                width: 100%;
+            }
+        }
+    }
 }
