@@ -1,3 +1,37 @@
-.App{
-    font-family: 'roboto';
+@import './variables.scss';
+body {
+    display: block;
+    background-color: $backgroundBlack;
+    color: white;
+    font-family: 'Roboto-Regular', sans-serif;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    #app {
+        width: inherit;
+        height: inherit;
+    }
+    .App {
+        width: 100%;
+        .container-content {
+            display: block;
+            margin-left: 5em;
+            height: 100vh;
+        }
+        @media screen and (max-width: 700px) {
+            .container-content {
+                width: 100%;
+                margin-left: 0em;
+            }
+        }
+    }
+}
+
+// font faces
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: local('Roboto-Regular'),
+        url('../fonts/Roboto-Regular.ttf') format('truetype');
 }

@@ -11,11 +11,15 @@
   "author": "Bruno Henrique",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
+    "js-cookie": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "react-router-guards": "^1.0.2"
   },
   "devDependencies": {
+    "@types/js-cookie": "^2.2.6",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.1",
     "@types/react-router-dom": "^5.1.7",
