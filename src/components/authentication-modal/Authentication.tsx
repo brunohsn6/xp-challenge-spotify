@@ -25,12 +25,13 @@ export default class Authentication extends Component<{}, InternalState> {
     private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ token: event.target.value });
     }
-    private authenticateToken(event: React.FormEvent<HTMLFormElement>) {
+    private async authenticateToken(event: React.FormEvent<HTMLFormElement>) {
         //authenticate token
         event.stopPropagation();
         event.preventDefault();
         console.log(this.state.token);
-        if (this.authenticationService.authorize()) {
+        await this.authenticationService.authorize();
+        if (AuthenticationService.isAuthenticated()) {
             this.setState({ redirect: '/' });
         }
     }

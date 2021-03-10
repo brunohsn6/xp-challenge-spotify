@@ -1,0 +1,63 @@
+@import '../../../assets/styles/variables.scss';
+
+.desc-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-right: 3em;
+
+    .img,
+    .desc {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .img {
+        width: 10em;
+        height: 10em;
+        &.effect {
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+            &:hover {
+                transform: scale(1.1);
+                transition: transform 0.1s;
+            }
+        }
+        &.default-album,
+        &.default-artist,
+        &.default-track {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        &.default-album {
+            background-image: url('../../../assets/images/default-album.png');
+        }
+        &.default-artist {
+            background-image: url('../../../assets/images/default-artist.png');
+        }
+        &.default-track {
+            background-image: url('../../../assets/images/default-track.png');
+        }
+    }
+    .desc,
+    .desc-artist {
+        padding-top: 1em;
+        text-align: center;
+        font-size: $smallFontSize;
+    }
+    .desc-artist {
+        color: $titleGrey;
+    }
+    &.big {
+        .img {
+            width: 100%;
+            height: auto;
+        }
+        .desc {
+            font-size: $mediumFontSize;
+        }
+    }
+}

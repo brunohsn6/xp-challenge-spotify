@@ -1,15 +1,15 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-interface IImage{
+export interface IImage{
     height: number;
     width: number;
     url: string;
 }
-interface IFollower{
+export interface IFollower{
     href: string | null;
     total: number;
 }
-interface ISearch<T>{
+export interface ISearch<T>{
     href: string;
     items: T[];
     limit: number;
@@ -18,7 +18,7 @@ interface ISearch<T>{
     previous: null;
     total: number;
 }
-interface IArtist{
+export interface IArtist{
     external_urls: any;
     followers: IFollower;
     genres: string[];
@@ -30,7 +30,7 @@ interface IArtist{
     type: string;
     uri: string;
 }
-interface IAlbum{
+export interface IAlbum{
     album_type: string;
     artists: IArtist[];
     available_markets: string[];
@@ -46,7 +46,7 @@ interface IAlbum{
     uri: string
 
 }
-interface ITrack{
+export interface ITrack{
     album: IAlbum;
     artists: IArtist[];
     available_markets: string[];
@@ -70,23 +70,59 @@ export interface ISearchAll{
     albums: ISearch<IAlbum>;
     tracks: ISearch<ITrack>;
 }
+
 export default class SpotifyService{
-    
+    public spotifyBaseUrl: string = 'https://api.spotify.com/v1';
     public async search(query: string): Promise<ISearchAll> {
-        const spotifySearchUrl: string = 'https://api.spotify.com/v1/search'
-        const options: AxiosRequestConfig = {
-            params: {
-                q: query,
-                type: 'artist,album,track'
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('authorization')}`
+        try{
+            const spotifySearchUrl: string = '/search'
+            const options: AxiosRequestConfig = {
+                params: {
+                    q: query,
+                    type: 'artist,album,track'
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('authorization')}`
+                }
+            };
+            
+            const { artists, albums, tracks } = (await axios.get<{artists: ISearch<IArtist>, albums: ISearch<IAlbum>, tracks: ISearch<ITrack>}>(`${this.spotifyBaseUrl}${spotifySearchUrl}`, options)).data;
+            return {artists, albums, tracks};
+
+        }catch(e){
+            if(e.response.status == 401){
+                history.pushState({}, '', '/authenticate');
+                history.go();
             }
-        };
+        }
+    }
+    public async getAlbumsTracks(albumId: string): Promise<{albumTracks: ISearch<ITrack>, album: IAlbum}>{
+        try{
+            const spotifyAlbumsUrl: string = `/albums/${albumId}`
+            const options: AxiosRequestConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('authorization')}`
+                }
+            };
+            const albumsTracksReq = axios.get(`${this.spotifyBaseUrl}${spotifyAlbumsUrl}/tracks`, options);
+            const albumReq = axios.get(`${this.spotifyBaseUrl}${spotifyAlbumsUrl}`, options);
+            const { albumTracks, album } = await axios.all([albumsTracksReq, albumReq])
+                .then(axios.spread((...responses) =>{
+                return {
+                    albumTracks: responses[0].data,
+                    album: responses[1].data
+                }
+            }));
+            return {albumTracks, album};
+        }catch(e){
+            if(e.response.status == 401){
+                history.pushState({}, '', '/authenticate');
+                history.go();
+            }
+        }
         
-        const { artists, albums, tracks } = (await axios.get<{artists: ISearch<IArtist>, albums: ISearch<IAlbum>, tracks: ISearch<ITrack>}>(spotifySearchUrl, options)).data;
-        return {artists, albums, tracks};
     }
     
 }

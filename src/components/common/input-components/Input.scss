@@ -9,6 +9,7 @@ input {
     height: 3em;
     font-size: $regularFontSize;
     border: none;
+    border-bottom: 1px solid $titleGrey;
     color: white;
     &:active,
     &:focus,

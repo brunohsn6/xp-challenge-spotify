@@ -4,22 +4,31 @@
     .header {
         padding-top: 1em;
     }
+    .searched-value {
+        display: flex;
+        font-size: $mediumFontSize;
+        margin-top: 2em;
+    }
     .content {
         display: flex;
-        height: 10em;
+        height: 12em;
         flex-direction: row;
-        flex-wrap: nowrap;
-        padding-bottom: 2em;
-        overflow: hidden;
-        .desc-section {
+        flex-wrap: wrap;
+        padding-top: 3em;
+        padding-bottom: 3em;
+        .content-label {
             display: flex;
-            flex-wrap: wrap;
             width: 100%;
-            .img,
-            .desc {
-                display: flex;
-                width: 100%;
-            }
+            font-size: $mediumFontSize;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+        .content-list {
+            display: flex;
+            width: 100%;
+            flex-wrap: nowrap;
+            overflow: hidden;
+            overflow-x: hidden;
         }
     }
 }

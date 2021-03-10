@@ -24,7 +24,7 @@ export default class AuthenticationService {
         try {
             const res: IToken = (await axios(`${spotify_url}/api/token`, options)).data;
             Cookies.set('authorization', `${res.access_token}`, { expires: res.expires_in, path: window.location.origin, sameSite: 'strict', secure:true });
-            return AuthenticationService.isAuthenticated();
+            return true;
         } catch (e) {
             return false;
         }

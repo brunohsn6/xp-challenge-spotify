@@ -3,15 +3,20 @@ import { Input, InputType } from '../common/input-components/Input';
 import './HomeScreen.scss';
 import SpotifyService, { ISearchAll } from '../../core/services/SpotifyService';
 import { Timers } from '../../utils/Timers';
+import SearchScreen from './SearchScreen';
+import UserIndicationsScreen from './UserIndicationsScreen';
 import If from '../../utils/If';
+import { Redirect } from 'react-router';
 class InternalState {
     public searchInput: string;
     public searchValue: string;
     public content: ISearchAll;
+    redirect: string;
     constructor() {
         this.searchInput = '';
         this.searchValue = '';
         this.content = null;
+        this.redirect = null;
     }
 }
 export default class HomeScreen extends Component<{}, InternalState> {
@@ -20,9 +25,10 @@ export default class HomeScreen extends Component<{}, InternalState> {
     constructor(props: {} | Readonly<{}>) {
         super(props);
         this.state = new InternalState();
-        this.handleSearch = this.handleSearch.bind(this);
         this.spotifyService = new SpotifyService();
         this.timer = new Timers();
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleAlbumClick = this.handleAlbumClick.bind(this);
     }
     private handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ searchInput: event.target.value });
@@ -39,7 +45,14 @@ export default class HomeScreen extends Component<{}, InternalState> {
             this.setState({ content: content });
         }
     }
+    private handleAlbumClick(albumId: string) {
+        history.pushState({}, 'Home', `/album/${albumId}`);
+        history.go();
+    }
     render() {
+        if (this.state.redirect) {
+            return <Redirect exact to={this.state.redirect} />;
+        }
         return (
             <div className="home-screen">
                 <section className="header">
@@ -53,60 +66,16 @@ export default class HomeScreen extends Component<{}, InternalState> {
                     />
                 </section>
                 <If test={this.state.content != null}>
-                    <section className="content">
-                        {this.state.content?.albums.items.map(
-                            (content, idx) => (
-                                <section
-                                    className="desc-section"
-                                    key={`album-${idx}`}
-                                >
-                                    <img
-                                        className="img"
-                                        src={content.images[0].url}
-                                    />
-                                    <span className="desc">{content.name}</span>
-                                </section>
-                            ),
-                        )}
-                    </section>
-                    <br></br>
-                    <br></br>
-                    <section className="content">
-                        {this.state.content?.artists.items.map(
-                            (content, idx) => (
-                                <section
-                                    className="desc-section"
-                                    key={`artist-${idx}`}
-                                >
-                                    <If test={content.images[0]?.url != null}>
-                                        <img
-                                            className="img"
-                                            src={content.images[0]?.url}
-                                        />
-                                    </If>
-                                    <span className="desc">{content.name}</span>
-                                </section>
-                            ),
-                        )}
-                    </section>
-                    <br></br>
-                    <br></br>
-                    <section className="content">
-                        {this.state.content?.tracks.items.map(
-                            (content, idx) => (
-                                <section
-                                    className="desc-section"
-                                    key={`track-${idx}`}
-                                >
-                                    <img
-                                        className="img"
-                                        src={content.album.images[0].url}
-                                    />
-                                    <span className="desc">{content.name}</span>
-                                </section>
-                            ),
-                        )}
-                    </section>
+                    <SearchScreen
+                        albumContent={this.state.content?.albums}
+                        artistContent={this.state.content?.artists}
+                        trackContent={this.state.content?.tracks}
+                        searchValue={this.state.searchValue}
+                        handleAlbumClick={this.handleAlbumClick}
+                    />
+                </If>
+                <If test={this.state.content == null}>
+                    <UserIndicationsScreen />
                 </If>
             </div>
         );
