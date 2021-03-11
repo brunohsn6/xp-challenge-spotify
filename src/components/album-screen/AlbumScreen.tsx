@@ -6,7 +6,10 @@ import SpotifyService, {
     ITrack,
 } from '../../core/services/SpotifyService';
 import If from '../../utils/If';
-import { BadgeButton, EBadgeType } from '../common/badge-button/BadgeButton';
+import {
+    BadgeButton,
+    EBadgeType,
+} from '../common/buttons/badge-button/BadgeButton';
 import './AlbumScreen.scss';
 class InternalState {
     tracks: ISearch<ITrack>;

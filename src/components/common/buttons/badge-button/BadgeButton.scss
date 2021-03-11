@@ -1,4 +1,4 @@
-@import '../../../assets/styles/variables.scss';
+@import '../../../../assets/styles/variables.scss';
 
 .desc-section {
     display: flex;
@@ -36,13 +36,13 @@
             background-size: contain;
         }
         &.default-album {
-            background-image: url('../../../assets/images/default-album.png');
+            background-image: url('../../../../assets/images/default-album.png');
         }
         &.default-artist {
-            background-image: url('../../../assets/images/default-artist.png');
+            background-image: url('../../../../assets/images/default-artist.png');
         }
         &.default-track {
-            background-image: url('../../../assets/images/default-track.png');
+            background-image: url('../../../../assets/images/default-track.png');
         }
     }
     .desc,

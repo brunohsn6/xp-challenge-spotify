@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import Authentication from './authentication-modal/Authentication';
 import HomeScreen from './home-screen/HomeScreen';
 import AlbumScreen from './album-screen/AlbumScreen';
+import MusicBar from './music-bar/MusicBar';
 import '../assets/styles/App.scss';
 import { GuardedRoute, GuardProvider } from 'react-router-guards';
 import { Sidebar } from './sidebar/Sidebar';
@@ -59,6 +60,7 @@ export default class App extends Component {
                         </GuardProvider>
                     </Router>
                 </Content>
+                {/* <MusicBar /> */}
             </div>
         );
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Authentication.scss';
 import AuthenticationService from '../../core/services/AuthenticationService';
 import { Input } from '../common/input-components/Input';
-import { Button } from '../common/Button';
+import { Button } from '../common/buttons/basic-button/BasicButton';
 import { Redirect } from 'react-router';
 
 class InternalState {

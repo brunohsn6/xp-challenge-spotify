@@ -14,6 +14,7 @@ interface IInput
     inputType?: InputType;
     inputLabel?: string;
     id: any;
+    animated?: boolean;
 }
 export function Input({
     id,
@@ -23,6 +24,7 @@ export function Input({
     placeholder,
     inputType = InputType.DEFAULT,
     inputLabel,
+    animated,
     ...rest
 }: IInput) {
     let classValues = className ? { className: `${className} ` } : {};
@@ -46,7 +48,7 @@ export function Input({
                 placeholder={placeholder}
                 {...rest}
             />
-            <span className="span-outline" />
+            {animated ? <span className="span-outline" /> : <></>}
         </>
     );
 }

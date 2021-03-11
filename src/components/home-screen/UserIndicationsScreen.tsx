@@ -6,7 +6,10 @@ import {
     ITrack,
 } from '../../core/services/SpotifyService';
 import If from '../../utils/If';
-import { BadgeButton, EBadgeType } from '../common/badge-button/BadgeButton';
+import {
+    BadgeButton,
+    EBadgeType,
+} from '../common/buttons/badge-button/BadgeButton';
 
 interface IUserIndicationsScreenProps {
     tracksContent: ISearch<IRecentlyPlayedTrack>;

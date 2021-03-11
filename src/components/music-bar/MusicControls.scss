@@ -1,0 +1,102 @@
+@import '../../assets/styles/variables.scss';
+.music-controls {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50em;
+    height: 5em;
+    .music-progress-bar {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-evenly;
+        align-items: center;
+        .progress-bar {
+            padding: 0;
+            margin: {
+                top: 0;
+                bottom: 0;
+                left: 1em;
+                right: 1em;
+            }
+            height: 0.1em;
+
+            &::-webkit-slider-thumb {
+            }
+        }
+        .current,
+        .total {
+            font-size: 0.7em;
+        }
+    }
+}
+.music-state-controls {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-width: 13em;
+    padding-right: 17em;
+    padding-left: 17em;
+    justify-content: space-evenly;
+    align-items: center;
+    .arrow-shuffle-back {
+        transform: rotate(180deg);
+        &::before {
+            top: -0.4em !important;
+        }
+    }
+    .arrow-shuffle-foward,
+    .arrow-shuffle-back {
+        border-style: solid;
+        box-sizing: border-box;
+        border-width: 7px 0px 7px 13px;
+        border-color: transparent transparent transparent $white;
+        &::before {
+            content: ' ';
+            position: absolute;
+            height: 13px;
+            border-style: solid;
+            top: 3.4em;
+            border-width: 0px 0px 0px 3px;
+            border-color: $white;
+        }
+    }
+    .play {
+        border-style: solid;
+        box-sizing: border-box;
+        border-width: 7px 0px 7px 13px;
+        border-color: transparent transparent transparent $white;
+    }
+    .pause {
+        height: 13px;
+        border-style: double;
+        border-width: 0px 0px 0px 10px;
+        border-color: $white;
+    }
+}
+.volumn-controls {
+    position: relative;
+    .volumn {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 7em;
+        .arrow-down {
+            border: solid $white;
+            margin-right: 1em;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+    }
+    .volumn-bar {
+        padding: 0;
+        margin: {
+            left: 0.5em;
+            right: 0.5em;
+        }
+        height: 0.1em;
+    }
+}

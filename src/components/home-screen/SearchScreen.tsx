@@ -5,7 +5,10 @@ import {
     ISearch,
     ITrack,
 } from '../../core/services/SpotifyService';
-import { BadgeButton, EBadgeType } from '../common/badge-button/BadgeButton';
+import {
+    BadgeButton,
+    EBadgeType,
+} from '../common/buttons/badge-button/BadgeButton';
 interface ISearchScreenProps {
     searchValue: string;
     albumContent: ISearch<IAlbum>;

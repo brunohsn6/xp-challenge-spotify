@@ -1,4 +1,5 @@
 import React from 'react';
+import './BasicButton.scss';
 interface IButton
     extends React.DetailedHTMLProps<
         React.InputHTMLAttributes<HTMLInputElement>,

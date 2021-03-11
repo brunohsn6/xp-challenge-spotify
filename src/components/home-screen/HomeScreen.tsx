@@ -84,6 +84,7 @@ export default class HomeScreen extends Component<{}, InternalState> {
                         value={this.state.searchInput}
                         placeholder="Começe a escrever..."
                         inputType={InputType.BIG}
+                        animated
                     />
                 </section>
                 <If

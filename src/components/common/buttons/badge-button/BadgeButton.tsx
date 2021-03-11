@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import If from '../../../utils/If';
+import If from '../../../../utils/If';
 import './BadgeButton.scss';
 export enum EBadgeType {
     ARTIST = 'E_ARTIST',
