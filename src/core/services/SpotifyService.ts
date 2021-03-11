@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
+import moment from "moment";
 export interface IImage{
     height: number;
     width: number;
@@ -17,6 +18,11 @@ export interface ISearch<T>{
     offset: number;
     previous: null;
     total: number;
+}
+export interface IRecentlyPlayedTrack{
+    context: any;
+    played_at: moment.Moment;
+    track: ITrack;
 }
 export interface IArtist{
     external_urls: any;
@@ -123,6 +129,42 @@ export default class SpotifyService{
             }
         }
         
+    }
+    public async getUsersRecentlyPlayedTracks(): Promise<ISearch<IRecentlyPlayedTrack>>{
+        try{
+            const spotifyRecentlyPlayedTracksUrl: string = '/me/player/recently-played';
+            const options: AxiosRequestConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('authorization')}`
+                }
+            };
+            const searchedTracks = (await axios.get(`${this.spotifyBaseUrl}${spotifyRecentlyPlayedTracksUrl}`, options)).data;
+            return searchedTracks;
+        }catch(e){
+            if(e.response.status == 401){
+                history.pushState({}, '', '/authenticate');
+                history.go();
+            }
+        }
+    }
+    public async getUsersTopArtists(): Promise<ISearch<IArtist>>{
+        try{
+            const spotifyRecentlyPlayedTracksUrl: string = `/me/top/artists`;
+            const options: AxiosRequestConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('authorization')}`
+                }
+            };
+            const recentlyPlayedTracks = (await axios.get(`${this.spotifyBaseUrl}${spotifyRecentlyPlayedTracksUrl}`, options)).data;
+            return recentlyPlayedTracks;
+        }catch(e){
+            if(e.response.status == 401){
+                history.pushState({}, '', '/authenticate');
+                history.go();
+            }
+        }
     }
     
 }

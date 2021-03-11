@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
+import qs from 'querystring';
 const spotifyCredentials ={
     clientId: 'c1f97b41a2244ebda219d6deb5df9915',
     secret: "ee14d89aa58f48c5a38f4f93f1d44e5f"
@@ -11,14 +12,21 @@ interface IToken{
     token_type: string;
 }
 export default class AuthenticationService {
+    public authorizeByToken(token: string): void{
+        Cookies.set('authorization', `${token}`, { path: window.location.origin, sameSite: 'strict', secure:true });
+
+    }
     public async authorize(): Promise<boolean> {
         const options:AxiosRequestConfig = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Basic ' + btoa(spotifyCredentials.clientId + ':' + spotifyCredentials.secret)
             },
-            data: 'grant_type=client_credentials',
-            method: "POST"
+            data: qs.stringify({
+                'grant_type':'client_credentials',
+                'scope':'user-read-recently-played'
+            }),
+            method: 'post'
 
         }
         try {

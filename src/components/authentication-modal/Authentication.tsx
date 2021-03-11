@@ -29,8 +29,9 @@ export default class Authentication extends Component<{}, InternalState> {
         //authenticate token
         event.stopPropagation();
         event.preventDefault();
-        console.log(this.state.token);
-        await this.authenticationService.authorize();
+        //console.log(this.state.token);
+        //await this.authenticationService.authorize();
+        this.authenticationService.authorizeByToken(this.state.token);
         if (AuthenticationService.isAuthenticated()) {
             this.setState({ redirect: '/' });
         }

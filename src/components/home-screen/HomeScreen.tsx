@@ -1,22 +1,34 @@
 import React, { Component } from 'react';
 import { Input, InputType } from '../common/input-components/Input';
 import './HomeScreen.scss';
-import SpotifyService, { ISearchAll } from '../../core/services/SpotifyService';
+import SpotifyService, {
+    IArtist,
+    IRecentlyPlayedTrack,
+    ISearch,
+    ISearchAll,
+    ITrack,
+} from '../../core/services/SpotifyService';
 import { Timers } from '../../utils/Timers';
 import SearchScreen from './SearchScreen';
 import UserIndicationsScreen from './UserIndicationsScreen';
 import If from '../../utils/If';
 import { Redirect } from 'react-router';
+import StringUtils from '../../utils/StringUtils';
 class InternalState {
     public searchInput: string;
     public searchValue: string;
     public content: ISearchAll;
+    public usersContent: {
+        tracks: ISearch<IRecentlyPlayedTrack>;
+        artists: ISearch<IArtist>;
+    };
     redirect: string;
     constructor() {
         this.searchInput = '';
         this.searchValue = '';
         this.content = null;
         this.redirect = null;
+        this.usersContent = { tracks: null, artists: null };
     }
 }
 export default class HomeScreen extends Component<{}, InternalState> {
@@ -29,6 +41,15 @@ export default class HomeScreen extends Component<{}, InternalState> {
         this.timer = new Timers();
         this.handleSearch = this.handleSearch.bind(this);
         this.handleAlbumClick = this.handleAlbumClick.bind(this);
+    }
+    async componentDidMount() {
+        const userArtists = await this.spotifyService.getUsersTopArtists();
+        const userTracks = await this.spotifyService.getUsersRecentlyPlayedTracks();
+        console.log('tracks: ', userTracks);
+        console.log('artists: ', userArtists);
+        this.setState({
+            usersContent: { tracks: userTracks, artists: userArtists },
+        });
     }
     private handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ searchInput: event.target.value });
@@ -65,7 +86,12 @@ export default class HomeScreen extends Component<{}, InternalState> {
                         inputType={InputType.BIG}
                     />
                 </section>
-                <If test={this.state.content != null}>
+                <If
+                    test={
+                        this.state.content != null &&
+                        !StringUtils.isNullOrEmpty(this.state.searchValue)
+                    }
+                >
                     <SearchScreen
                         albumContent={this.state.content?.albums}
                         artistContent={this.state.content?.artists}
@@ -74,8 +100,16 @@ export default class HomeScreen extends Component<{}, InternalState> {
                         handleAlbumClick={this.handleAlbumClick}
                     />
                 </If>
-                <If test={this.state.content == null}>
-                    <UserIndicationsScreen />
+                <If
+                    test={
+                        this.state.content == null ||
+                        StringUtils.isNullOrEmpty(this.state.searchValue)
+                    }
+                >
+                    <UserIndicationsScreen
+                        tracksContent={this.state.usersContent?.tracks}
+                        artistContent={this.state.usersContent?.artists}
+                    />
                 </If>
             </div>
         );
