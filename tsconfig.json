@@ -3,7 +3,7 @@
         "jsx": "react",
         "module": "commonjs",
         "noImplicitAny": true,
-        "outDir": "./dist/",
+        "outDir": "./dist/static",
         "esModuleInterop": true,
         "preserveConstEnums": true,
         "removeComments": true,

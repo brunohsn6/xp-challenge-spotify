@@ -8,6 +8,8 @@ interface IMusicControls {
     playOrPause: any;
     shuffleMusic: any;
     setVolumn: any;
+    currPlaying: string;
+    playlist: string[];
 }
 export function MusicControls({
     audioRef,
@@ -15,6 +17,8 @@ export function MusicControls({
     playOrPause,
     shuffleMusic,
     setVolumn,
+    currPlaying,
+    playlist
 }: IMusicControls) {
     const [duration, setDuration] = useState(0);
     const [curr, setCurr] = useState(0);
@@ -27,13 +31,16 @@ export function MusicControls({
         const value = (curr * 100) / duration;
         return !Number.isNaN(value) ? value : 0;
     };
+    const handleShuffleMusic = (direction: boolean) => {
+        shuffleMusic(direction);
+    }
     return (
         <>
             <audio
                 onTimeUpdate={e => setCurr((e.target as any).currentTime)}
                 onCanPlay={e => setDuration((e.target as any).duration)}
                 ref={audioRef}
-                src={`https://p.scdn.co/mp3-preview/61144d52a3b955f9649313fa416b397acc0b28a6?cid=c1f97b41a2244ebda219d6deb5df9915`}
+                src={currPlaying ?? ""}
             />
             <div className="music-controls">
                 <div className="music-progress-bar">
@@ -55,7 +62,7 @@ export function MusicControls({
                 <div className="music-state-controls">
                     <i
                         className="arrow-shuffle-back"
-                        onClick={() => shuffleMusic(false)}
+                        onClick={() => { handleShuffleMusic(false) }}
                     />
                     <i
                         className={`${!isPlaying ? 'play' : 'pause'}`}
@@ -63,7 +70,7 @@ export function MusicControls({
                     />
                     <i
                         className="arrow-shuffle-foward"
-                        onClick={() => shuffleMusic(true)}
+                        onClick={() => { handleShuffleMusic(true) }}
                     />
                 </div>
             </div>

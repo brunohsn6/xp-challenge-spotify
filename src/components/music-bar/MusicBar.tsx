@@ -1,47 +1,57 @@
-import React, { Component } from 'react';
+import React, { Component, useRef, useState } from 'react';
 import { MusicControls } from './MusicControls';
 import './MusicBar.scss';
-class MusicBarProps {
-    audioRef: React.RefObject<HTMLAudioElement>;
+import { connect } from 'react-redux';
+import If from '../../utils/If';
+import { playMusic, setMusicState } from '../../store/action';
+import StringUtils from '../../utils/StringUtils';
+interface IMusicBarState {
     isPlaying: boolean;
-    constructor() {
-        this.audioRef = React.createRef<HTMLAudioElement>();
-        this.isPlaying = false;
-    }
+    currPlaying: string;
+    playlist: string[];
+    dispatch: any;
 }
-export default class MusicBar extends Component<{}, MusicBarProps> {
-    constructor(props: {} | Readonly<{}>) {
-        super(props);
-        this.state = new MusicBarProps();
-        this.playOrPause = this.playOrPause.bind(this);
-        this.shuffleMusic = this.shuffleMusic.bind(this);
-        this.changeVolumn = this.changeVolumn.bind(this);
-    }
-    private playOrPause(): void {
-        if (!this.state.isPlaying) {
-            this.state.audioRef.current.play();
+const MusicBar = (props: IMusicBarState) => {
+    const { isPlaying, currPlaying, playlist, dispatch } = props;
+    const [audioRef, setAudioRef] = useState(React.createRef<HTMLAudioElement>());
+    const playOrPause = () => {
+        if (!isPlaying) {
+            audioRef.current && audioRef.current.play();
         } else {
-            this.state.audioRef.current.pause();
+            audioRef.current && audioRef.current.pause();
         }
-        this.setState({ isPlaying: !this.state.isPlaying });
+
+        dispatch(setMusicState(!isPlaying));
     }
-    private changeVolumn(value: any) {
-        this.state.audioRef.current.volume = value;
+    const changeVolumn = (value: any) => {
+        audioRef.current.volume = value;
     }
-    private shuffleMusic(direction: boolean) {
-        //todo
+    const shuffleMusic = (direction: boolean) => {
+        audioRef.current && audioRef.current.pause();
+        dispatch(setMusicState(false));
+        let currIdx = playlist.findIndex(track => track == currPlaying);
+        const nextMusic = direction ? playlist[++currIdx] ?? "" : playlist[--currIdx] ?? "";
+        dispatch(playMusic(nextMusic, playlist));
     }
-    render() {
-        return (
+    return (
+        <If test={!StringUtils.isNullOrEmpty(currPlaying)}>
             <div className="music-bar">
                 <MusicControls
-                    audioRef={this.state.audioRef}
-                    isPlaying={this.state.isPlaying}
-                    playOrPause={this.playOrPause}
-                    shuffleMusic={this.shuffleMusic}
-                    setVolumn={this.changeVolumn}
+                    currPlaying={currPlaying}
+                    playlist={playlist}
+                    audioRef={audioRef}
+                    isPlaying={isPlaying}
+                    playOrPause={playOrPause}
+                    shuffleMusic={shuffleMusic}
+                    setVolumn={changeVolumn}
                 />
             </div>
-        );
-    }
+        </If>
+    );
 }
+
+export default connect((state: IMusicBarState) => ({
+    isPlaying: state.isPlaying,
+    currPlaying: state.currPlaying,
+    playlist: state.playlist
+}))(MusicBar);

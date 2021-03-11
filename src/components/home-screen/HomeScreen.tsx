@@ -14,6 +14,8 @@ import UserIndicationsScreen from './UserIndicationsScreen';
 import If from '../../utils/If';
 import { Redirect } from 'react-router';
 import StringUtils from '../../utils/StringUtils';
+import { connect } from 'react-redux';
+import { playMusic } from '../../store/action';
 class InternalState {
     public searchInput: string;
     public searchValue: string;
@@ -31,16 +33,20 @@ class InternalState {
         this.usersContent = { tracks: null, artists: null };
     }
 }
-export default class HomeScreen extends Component<{}, InternalState> {
+interface IHomeScreenProps {
+    playMusic: any;
+}
+class HomeScreen extends Component<IHomeScreenProps, InternalState> {
     private spotifyService: SpotifyService;
     private timer: Timers;
-    constructor(props: {} | Readonly<{}>) {
+    constructor(props: IHomeScreenProps) {
         super(props);
         this.state = new InternalState();
         this.spotifyService = new SpotifyService();
         this.timer = new Timers();
         this.handleSearch = this.handleSearch.bind(this);
         this.handleAlbumClick = this.handleAlbumClick.bind(this);
+        this.handleTrackClick = this.handleTrackClick.bind(this);
     }
     async componentDidMount() {
         const userArtists = await this.spotifyService.getUsersTopArtists();
@@ -59,16 +65,28 @@ export default class HomeScreen extends Component<{}, InternalState> {
         });
     }
     private async search(): Promise<void> {
+        console.log(this.state.content)
         const content = await this.spotifyService.search(
             this.state.searchValue,
         );
         if (content) {
             this.setState({ content: content });
         }
+        console.log(this.state.content)
     }
     private handleAlbumClick(albumId: string) {
         history.pushState({}, 'Home', `/album/${albumId}`);
         history.go();
+    }
+    private handleTrackClick(trackId: string) {
+        let preview_url = null;
+        if (this.state?.content != null && !StringUtils.isNullOrEmpty(this.state.searchValue)) {
+            preview_url = this.state.content.tracks.items.find(track => track.id == trackId)?.preview_url;
+        }
+        else {
+            preview_url = this.state.usersContent.tracks.items.find(track => track.track.id == trackId)?.track.preview_url;
+        }
+        this.props.playMusic(preview_url, [preview_url]);
     }
     render() {
         if (this.state.redirect) {
@@ -99,6 +117,7 @@ export default class HomeScreen extends Component<{}, InternalState> {
                         trackContent={this.state.content?.tracks}
                         searchValue={this.state.searchValue}
                         handleAlbumClick={this.handleAlbumClick}
+                        handleTrackClick={this.handleTrackClick}
                     />
                 </If>
                 <If
@@ -110,9 +129,14 @@ export default class HomeScreen extends Component<{}, InternalState> {
                     <UserIndicationsScreen
                         tracksContent={this.state.usersContent?.tracks}
                         artistContent={this.state.usersContent?.artists}
+                        handleTrackClick={this.handleTrackClick}
                     />
                 </If>
             </div>
         );
     }
 }
+const mapDispatchToProps = (dispatch: any) => ({
+    playMusic: (music: string, playlist: string[]) => dispatch(playMusic(music, playlist))
+})
+export default connect(null, mapDispatchToProps)(HomeScreen);

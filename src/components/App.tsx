@@ -7,6 +7,8 @@ import MusicBar from './music-bar/MusicBar';
 import '../assets/styles/App.scss';
 import { GuardedRoute, GuardProvider } from 'react-router-guards';
 import { Sidebar } from './sidebar/Sidebar';
+import { Provider } from 'react-redux';
+import store from '../store';
 import {
     GuardFunctionRouteProps,
     GuardToRoute,
@@ -36,31 +38,33 @@ export default class App extends Component {
         return (
             <div className="App">
                 <Sidebar />
-                <Content>
-                    <Router>
-                        <GuardProvider guards={[requireLogin]}>
-                            <Switch>
-                                <GuardedRoute
-                                    path="/authenticate"
-                                    component={Authentication}
-                                />
-                                <GuardedRoute
-                                    exact
-                                    path="/"
-                                    component={HomeScreen}
-                                    meta={{ auth: true }}
-                                />
-                                <GuardedRoute
-                                    exact
-                                    path="/album/:id"
-                                    component={AlbumScreen}
-                                    meta={{ auth: true }}
-                                />
-                            </Switch>
-                        </GuardProvider>
-                    </Router>
-                </Content>
-                {/* <MusicBar /> */}
+                <Provider store={store}>
+                    <Content>
+                        <Router>
+                            <GuardProvider guards={[requireLogin]}>
+                                <Switch>
+                                    <GuardedRoute
+                                        path="/authenticate"
+                                        component={Authentication}
+                                    />
+                                    <GuardedRoute
+                                        exact
+                                        path="/"
+                                        component={HomeScreen}
+                                        meta={{ auth: true }}
+                                    />
+                                    <GuardedRoute
+                                        exact
+                                        path="/album/:id"
+                                        component={AlbumScreen}
+                                        meta={{ auth: true }}
+                                    />
+                                </Switch>
+                            </GuardProvider>
+                        </Router>
+                    </Content>
+                    <MusicBar />
+                </Provider>
             </div>
         );
     }

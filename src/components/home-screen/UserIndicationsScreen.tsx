@@ -14,10 +14,12 @@ import {
 interface IUserIndicationsScreenProps {
     tracksContent: ISearch<IRecentlyPlayedTrack>;
     artistContent: ISearch<IArtist>;
+    handleTrackClick: any;
 }
 export default function UserIndicationsScreen({
     tracksContent,
     artistContent,
+    handleTrackClick
 }: IUserIndicationsScreenProps) {
     return (
         <>
@@ -38,6 +40,7 @@ export default function UserIndicationsScreen({
                                         content.track?.album?.images[0]?.url
                                     }
                                     type={EBadgeType.TRACK}
+                                    handleClick={handleTrackClick}
                                 />
                             </React.Fragment>
                         ))}

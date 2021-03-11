@@ -1,5 +1,7 @@
 import moment from 'moment';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { playMusic } from '../../store/action';
 import SpotifyService, {
     IAlbum,
     ISearch,
@@ -15,16 +17,20 @@ class InternalState {
     tracks: ISearch<ITrack>;
     album: IAlbum;
     backPage: boolean;
+    musicState: { currPlaying: string, playlist: string[] }
     constructor() {
         this.tracks = null;
         this.album = null;
         this.backPage = false;
     }
 }
-export default class AlbumScreen extends Component<{}, InternalState> {
+interface IAlbumScreenProps {
+    changeMusic: any;
+}
+class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
     private spotifyService: SpotifyService;
 
-    constructor(props: {} | Readonly<{}>) {
+    constructor(props: IAlbumScreenProps) {
         super(props);
         this.state = new InternalState();
         this.spotifyService = new SpotifyService();
@@ -38,10 +44,15 @@ export default class AlbumScreen extends Component<{}, InternalState> {
         } = await this.spotifyService.getAlbumsTracks(id);
         this.setState({ tracks: albumTracks, album: album });
     }
+    async componentWillUnmount() {
+        this.props.changeMusic("", []);
+    }
     private handleBack(): void {
         history.go(-1);
     }
-
+    private get playlist(): string[] {
+        return this.state.tracks.items.map<string>(track => track.preview_url);
+    }
     render() {
         return (
             <div className="album-screen">
@@ -70,6 +81,7 @@ export default class AlbumScreen extends Component<{}, InternalState> {
                                 <li
                                     key={`track-list-${idx}`}
                                     className="track-item"
+                                    onClick={() => this.props.changeMusic(track.preview_url, this.playlist)}
                                 >
                                     <span className="track-name">
                                         {track.name}
@@ -86,7 +98,11 @@ export default class AlbumScreen extends Component<{}, InternalState> {
                         </ol>
                     </If>
                 </section>
-            </div>
+            </div >
         );
     }
 }
+const mapDispatchToProps = (dispatch: any) => ({
+    changeMusic: (music: string, playlist: string[]) => dispatch(playMusic(music, playlist))
+})
+export default connect(null, mapDispatchToProps)(AlbumScreen);

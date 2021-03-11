@@ -72,6 +72,7 @@ export default function SearchScreen({
                                 imageDescription={content.name}
                                 imageUrl={content.album.images[0].url}
                                 type={EBadgeType.TRACK}
+                                handleClick={handleTrackClick}
                             />
                         </React.Fragment>
                     ))}

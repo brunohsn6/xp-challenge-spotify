@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    width: 100%;
+    width: min-content;
     margin-right: 3em;
 
     .img,
@@ -55,6 +55,7 @@
         color: $titleGrey;
     }
     &.big {
+        width: 100%;
         .img {
             width: 100%;
             height: auto;
