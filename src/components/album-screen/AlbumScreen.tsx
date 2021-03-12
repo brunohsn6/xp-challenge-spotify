@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { playMusic } from '../../store/action';
+import { playMusic, setMusicState } from '../../store/action';
 import SpotifyService, {
     IAlbum,
     ISearch,
@@ -17,7 +17,7 @@ class InternalState {
     tracks: ISearch<ITrack>;
     album: IAlbum;
     backPage: boolean;
-    musicState: { currPlaying: string, playlist: string[] }
+    musicState: { currPlaying: string; playlist: string[] };
     constructor() {
         this.tracks = null;
         this.album = null;
@@ -25,7 +25,9 @@ class InternalState {
     }
 }
 interface IAlbumScreenProps {
+    music: string;
     changeMusic: any;
+    isPlaying: boolean;
 }
 class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
     private spotifyService: SpotifyService;
@@ -35,20 +37,28 @@ class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
         this.state = new InternalState();
         this.spotifyService = new SpotifyService();
         this.handleBack = this.handleBack.bind(this);
+        this.playFromList = this.playFromList.bind(this);
     }
     async componentDidMount() {
-        const id = window.location.pathname.split('/').pop();
+        const albumId = localStorage.getItem('albumId');
         const {
             albumTracks,
             album,
-        } = await this.spotifyService.getAlbumsTracks(id);
+        } = await this.spotifyService.getAlbumsTracks(albumId);
         this.setState({ tracks: albumTracks, album: album });
     }
     async componentWillUnmount() {
-        this.props.changeMusic("", []);
+        localStorage.removeItem('albumId');
+        this.props.changeMusic('', []);
     }
     private handleBack(): void {
         history.go(-1);
+    }
+    private isPlaying(id: string) {
+        return id == this.props.music;
+    }
+    private playFromList(trackUrl: string) {
+        this.props.changeMusic(trackUrl, this.playlist);
     }
     private get playlist(): string[] {
         return this.state.tracks.items.map<string>(track => track.preview_url);
@@ -80,8 +90,14 @@ class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
                             {this.state?.tracks?.items.map((track, idx) => (
                                 <li
                                     key={`track-list-${idx}`}
-                                    className="track-item"
-                                    onClick={() => this.props.changeMusic(track.preview_url, this.playlist)}
+                                    className={`track-item${
+                                        this.isPlaying(track.preview_url)
+                                            ? ' playing'
+                                            : ''
+                                    }`}
+                                    onClick={() =>
+                                        this.playFromList(track.preview_url)
+                                    }
                                 >
                                     <span className="track-name">
                                         {track.name}
@@ -98,11 +114,17 @@ class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
                         </ol>
                     </If>
                 </section>
-            </div >
+            </div>
         );
     }
 }
 const mapDispatchToProps = (dispatch: any) => ({
-    changeMusic: (music: string, playlist: string[]) => dispatch(playMusic(music, playlist))
-})
-export default connect(null, mapDispatchToProps)(AlbumScreen);
+    changeMusic: (music: string, playlist: string[]) => {
+        dispatch(playMusic(music, playlist));
+    },
+});
+const mapStateToProps = state => ({
+    music: state.currPlaying,
+    isPlaying: state.isPlaying,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumScreen);

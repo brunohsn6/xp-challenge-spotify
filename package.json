@@ -4,8 +4,15 @@
   "description": "XP challenge of spotify application development",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development --stats-error-details auto --open --hot",
-    "build": "webpack --mode production",
+    "start": "webpack serve --mode development --env DSV --stats-error-details auto --open --hot",
+    "start:dev": "webpack serve --mode development --env DSV --stats-error-details auto --open --hot",
+    "start:hml": "webpack serve --mode homolog --env HML --stats-error-details auto --open --hot",
+    "start:prd": "webpack serve --mode production --env PRD --stats-error-details auto --open --hot",
+    
+    "build:dev": "webpack --mode development --env DSV",
+    "build:hml": "webpack --mode production --env HML",
+    "build:prd": "webpack --mode production --env PRD",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bruno Henrique",

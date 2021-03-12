@@ -13,7 +13,9 @@ interface IMusicBarState {
 }
 const MusicBar = (props: IMusicBarState) => {
     const { isPlaying, currPlaying, playlist, dispatch } = props;
-    const [audioRef, setAudioRef] = useState(React.createRef<HTMLAudioElement>());
+    const [audioRef, setAudioRef] = useState(
+        React.createRef<HTMLAudioElement>(),
+    );
     const playOrPause = () => {
         if (!isPlaying) {
             audioRef.current && audioRef.current.play();
@@ -22,17 +24,18 @@ const MusicBar = (props: IMusicBarState) => {
         }
 
         dispatch(setMusicState(!isPlaying));
-    }
+    };
     const changeVolumn = (value: any) => {
         audioRef.current.volume = value;
-    }
+    };
     const shuffleMusic = (direction: boolean) => {
         audioRef.current && audioRef.current.pause();
-        dispatch(setMusicState(false));
         let currIdx = playlist.findIndex(track => track == currPlaying);
-        const nextMusic = direction ? playlist[++currIdx] ?? "" : playlist[--currIdx] ?? "";
+        const nextMusic = direction
+            ? playlist[++currIdx] ?? ''
+            : playlist[--currIdx] ?? '';
         dispatch(playMusic(nextMusic, playlist));
-    }
+    };
     return (
         <If test={!StringUtils.isNullOrEmpty(currPlaying)}>
             <div className="music-bar">
@@ -48,10 +51,10 @@ const MusicBar = (props: IMusicBarState) => {
             </div>
         </If>
     );
-}
+};
 
 export default connect((state: IMusicBarState) => ({
     isPlaying: state.isPlaying,
     currPlaying: state.currPlaying,
-    playlist: state.playlist
+    playlist: state.playlist,
 }))(MusicBar);

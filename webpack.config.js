@@ -5,8 +5,21 @@ const Webpack = require('webpack');
 const fs = require('fs');
 
 function getConfigs() {
-  let modeIdx = process.argv.findIndex(value => value === '--mode');
-  const mode = process.argv[++modeIdx];
+  let modeIdx = process.argv.findIndex(value => value === '--env');
+  let mode = process.argv[++modeIdx];
+  switch (mode) {
+    case 'DSV':
+      mode = 'development';
+      break;
+    case 'HML':
+      mode = 'homolog';
+      break;
+    case 'PRD':
+      mode = 'production';
+      break;
+    default:
+      mode = 'development';
+  }
   const fileEnvPath = path.join(__dirname, 'configs', `${mode}.js`);
 
   if (mode != '' && fs.existsSync(fileEnvPath)) {

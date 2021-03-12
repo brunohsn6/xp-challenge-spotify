@@ -18,7 +18,7 @@ export function MusicControls({
     shuffleMusic,
     setVolumn,
     currPlaying,
-    playlist
+    playlist,
 }: IMusicControls) {
     const [duration, setDuration] = useState(0);
     const [curr, setCurr] = useState(0);
@@ -33,20 +33,22 @@ export function MusicControls({
     };
     const handleShuffleMusic = (direction: boolean) => {
         shuffleMusic(direction);
-    }
+    };
+    const getInSeconds = (time: number) => {
+        return (time / 100).toFixed(2).replace('.', ':');
+    };
     return (
         <>
             <audio
+                autoPlay
                 onTimeUpdate={e => setCurr((e.target as any).currentTime)}
                 onCanPlay={e => setDuration((e.target as any).duration)}
                 ref={audioRef}
-                src={currPlaying ?? ""}
+                src={currPlaying ?? ''}
             />
             <div className="music-controls">
                 <div className="music-progress-bar">
-                    <span className="current">
-                        {curr.toFixed(2).replace('.', ':')}
-                    </span>
+                    <span className="current">{getInSeconds(curr)}</span>
                     <input
                         id="progress-bar"
                         type="range"
@@ -55,14 +57,14 @@ export function MusicControls({
                         onChange={handleProgress}
                         value={getProgressValue()}
                     />
-                    <span className="total">
-                        {duration.toFixed(2).replace('.', ':')}
-                    </span>
+                    <span className="total">{getInSeconds(duration)}</span>
                 </div>
                 <div className="music-state-controls">
                     <i
                         className="arrow-shuffle-back"
-                        onClick={() => { handleShuffleMusic(false) }}
+                        onClick={() => {
+                            handleShuffleMusic(false);
+                        }}
                     />
                     <i
                         className={`${!isPlaying ? 'play' : 'pause'}`}
@@ -70,7 +72,9 @@ export function MusicControls({
                     />
                     <i
                         className="arrow-shuffle-foward"
-                        onClick={() => { handleShuffleMusic(true) }}
+                        onClick={() => {
+                            handleShuffleMusic(true);
+                        }}
                     />
                 </div>
             </div>

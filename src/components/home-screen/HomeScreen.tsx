@@ -51,8 +51,6 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
     async componentDidMount() {
         const userArtists = await this.spotifyService.getUsersTopArtists();
         const userTracks = await this.spotifyService.getUsersRecentlyPlayedTracks();
-        console.log('tracks: ', userTracks);
-        console.log('artists: ', userArtists);
         this.setState({
             usersContent: { tracks: userTracks, artists: userArtists },
         });
@@ -65,17 +63,16 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
         });
     }
     private async search(): Promise<void> {
-        console.log(this.state.content);
         const content = await this.spotifyService.search(
             this.state.searchValue,
         );
         if (content) {
             this.setState({ content: content });
         }
-        console.log(this.state.content);
     }
-    private handleAlbumClick(albumId: string) {
-        history.pushState({}, 'Home', `/album/${albumId}`);
+    private handleAlbumClick(albumId: string, artist: string) {
+        localStorage.setItem('albumId', albumId);
+        history.pushState({}, 'Home', `/album/${artist}`);
         history.go();
     }
     private handleTrackClick(trackId: string) {

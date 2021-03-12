@@ -6,9 +6,9 @@ interface IGlobalReducer{
     isPlaying: boolean;
 }
 const INITIAL_STATE: IGlobalReducer = {
-    currPlaying: ' ',
+    currPlaying: '',
     playlist: [],
-    isPlaying: false
+    isPlaying: true,
 }
 
 function reducer(state = INITIAL_STATE, action: any): IGlobalReducer{
@@ -17,7 +17,7 @@ function reducer(state = INITIAL_STATE, action: any): IGlobalReducer{
             return { ...state, currPlaying: action.currPlaying, playlist: action.playlist, isPlaying: action.isPlaying }
         case 'PLAY_MUSIC':
             return { ...state, isPlaying: action.isPlaying}
-            default:
+        default:
             return state;
     }
 }

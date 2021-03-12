@@ -1,14 +1,17 @@
 @import '../../assets/styles/variables.scss';
+
 .music-controls {
     display: flex;
     flex-wrap: wrap;
     width: 50em;
     height: 5em;
+    justify-content: center;
+    @import './InputSettings.scss';
     .music-progress-bar {
         display: flex;
         flex-direction: row;
         width: 100%;
-        justify-content: space-evenly;
+        justify-content: center;
         align-items: center;
         .progress-bar {
             padding: 0;
@@ -74,7 +77,9 @@
     }
 }
 .volumn-controls {
-    position: relative;
+    position: absolute;
+    right: 1em;
+    @import './InputSettings.scss';
     .volumn {
         display: flex;
         flex-direction: row;

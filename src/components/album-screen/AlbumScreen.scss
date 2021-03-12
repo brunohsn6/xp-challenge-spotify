@@ -4,12 +4,14 @@
     display: flex;
     flex-wrap: wrap;
     padding: 5em 5em 0em 3em;
+    padding-bottom: 8em;
     .header {
         display: flex;
         width: 100%;
         margin-bottom: 1em;
         .back-btn {
             background-color: transparent;
+            cursor: pointer;
             border: none;
             color: $white;
             display: flex;
@@ -45,6 +47,7 @@
                 justify-content: space-between;
                 width: 100%;
                 margin-bottom: 1.5em;
+                cursor: pointer;
                 &::before {
                     position: relative;
                     margin-left: -3em;
@@ -52,6 +55,12 @@
                     counter-increment: section;
                     content: counter(section) '.';
                     color: $titleGrey;
+                }
+                &:hover {
+                    color: $titleGrey;
+                }
+                &.playing {
+                    color: $green;
                 }
                 .track-name {
                     width: 100%;

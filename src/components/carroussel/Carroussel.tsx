@@ -27,7 +27,6 @@ export function Carroussel(props): JSX.Element {
                 }
             }
             sliderRef.current.scrollTo(scrollTo, 0);
-            console.log(sliderOffset, scrollTo, scrollWidth);
             setSliderOffset(scrollTo);
         }
     };
@@ -45,7 +44,7 @@ export function Carroussel(props): JSX.Element {
             </div>
             <button
                 className="skipper-right"
-                disabled={sliderOffset + scrollSkipWidth >= scrollSize}
+                disabled={sliderOffset == scrollSize}
                 onClick={() => slide(1)}
             >
                 <i className="arrow-right" />

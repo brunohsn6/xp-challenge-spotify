@@ -42,7 +42,12 @@ export default function SearchScreen({
                                 artist={content?.artists[0]?.name}
                                 imageUrl={content.images[0].url}
                                 type={EBadgeType.ALBUM}
-                                handleClick={handleAlbumClick}
+                                handleClick={id =>
+                                    handleAlbumClick(
+                                        id,
+                                        content?.artists[0].name,
+                                    )
+                                }
                             />
                         </React.Fragment>
                     ))}
