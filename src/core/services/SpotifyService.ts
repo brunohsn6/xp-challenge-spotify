@@ -1,6 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 import moment from "moment";
+import CONSTANTS from '../../constants';
 export interface IImage{
     height: number;
     width: number;
@@ -78,10 +79,8 @@ export interface ISearchAll{
 }
 
 export default class SpotifyService{
-    public spotifyBaseUrl: string = 'https://api.spotify.com/v1';
     public async search(query: string): Promise<ISearchAll> {
         try{
-            const spotifySearchUrl: string = '/search'
             const options: AxiosRequestConfig = {
                 params: {
                     q: query,
@@ -93,7 +92,7 @@ export default class SpotifyService{
                 }
             };
             
-            const { artists, albums, tracks } = (await axios.get<{artists: ISearch<IArtist>, albums: ISearch<IAlbum>, tracks: ISearch<ITrack>}>(`${this.spotifyBaseUrl}${spotifySearchUrl}`, options)).data;
+            const { artists, albums, tracks } = (await axios.get<{artists: ISearch<IArtist>, albums: ISearch<IAlbum>, tracks: ISearch<ITrack>}>(`${CONSTANTS.spotifyBaseUrl}${CONSTANTS.spotifySearchUrl}`, options)).data;
             return {artists, albums, tracks};
 
         }catch(e){
@@ -105,15 +104,15 @@ export default class SpotifyService{
     }
     public async getAlbumsTracks(albumId: string): Promise<{albumTracks: ISearch<ITrack>, album: IAlbum}>{
         try{
-            const spotifyAlbumsUrl: string = `/albums/${albumId}`
+            const spotifyAlbumsUrl: string = CONSTANTS.spotifyAlbumsUrl.replace('{id}',albumId);
             const options: AxiosRequestConfig = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Cookies.get('authorization')}`
                 }
             };
-            const albumsTracksReq = axios.get(`${this.spotifyBaseUrl}${spotifyAlbumsUrl}/tracks`, options);
-            const albumReq = axios.get(`${this.spotifyBaseUrl}${spotifyAlbumsUrl}`, options);
+            const albumsTracksReq = axios.get(`${CONSTANTS.spotifyBaseUrl}${spotifyAlbumsUrl}/tracks`, options);
+            const albumReq = axios.get(`${CONSTANTS.spotifyBaseUrl}${spotifyAlbumsUrl}`, options);
             const { albumTracks, album } = await axios.all([albumsTracksReq, albumReq])
                 .then(axios.spread((...responses) =>{
                 return {
@@ -132,14 +131,13 @@ export default class SpotifyService{
     }
     public async getUsersRecentlyPlayedTracks(): Promise<ISearch<IRecentlyPlayedTrack>>{
         try{
-            const spotifyRecentlyPlayedTracksUrl: string = '/me/player/recently-played';
             const options: AxiosRequestConfig = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Cookies.get('authorization')}`
                 }
             };
-            const searchedTracks = (await axios.get(`${this.spotifyBaseUrl}${spotifyRecentlyPlayedTracksUrl}`, options)).data;
+            const searchedTracks = (await axios.get(`${CONSTANTS.spotifyBaseUrl}${CONSTANTS.spotifyRecentlyPlayedTracksUrl}`, options)).data;
             return searchedTracks;
         }catch(e){
             if(e.response.status == 401){
@@ -150,14 +148,13 @@ export default class SpotifyService{
     }
     public async getUsersTopArtists(): Promise<ISearch<IArtist>>{
         try{
-            const spotifyRecentlyPlayedTracksUrl: string = `/me/top/artists`;
             const options: AxiosRequestConfig = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Cookies.get('authorization')}`
                 }
             };
-            const recentlyPlayedTracks = (await axios.get(`${this.spotifyBaseUrl}${spotifyRecentlyPlayedTracksUrl}`, options)).data;
+            const recentlyPlayedTracks = (await axios.get(`${CONSTANTS.spotifyBaseUrl}${CONSTANTS.usersTopArtistsUrl}`, options)).data;
             return recentlyPlayedTracks;
         }catch(e){
             if(e.response.status == 401){

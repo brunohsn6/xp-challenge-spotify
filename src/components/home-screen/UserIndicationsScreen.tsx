@@ -3,14 +3,13 @@ import {
     IArtist,
     IRecentlyPlayedTrack,
     ISearch,
-    ITrack,
 } from '../../core/services/SpotifyService';
 import If from '../../utils/If';
 import {
     BadgeButton,
     EBadgeType,
 } from '../common/buttons/badge-button/BadgeButton';
-
+import { Carroussel } from '../carroussel/Carroussel';
 interface IUserIndicationsScreenProps {
     tracksContent: ISearch<IRecentlyPlayedTrack>;
     artistContent: ISearch<IArtist>;
@@ -19,7 +18,7 @@ interface IUserIndicationsScreenProps {
 export default function UserIndicationsScreen({
     tracksContent,
     artistContent,
-    handleTrackClick
+    handleTrackClick,
 }: IUserIndicationsScreenProps) {
     return (
         <>
@@ -28,13 +27,13 @@ export default function UserIndicationsScreen({
                     <span className="content-label">
                         Músicas tocadas recentemente
                     </span>
-                    <section className="content-list">
+                    <Carroussel>
                         {tracksContent?.items?.map((content, idx) => (
                             <React.Fragment key={`tracks-search-list-${idx}`}>
                                 <BadgeButton
-                                    id={content.track.id}
-                                    imageDescription={content.track.name}
-                                    artist={content.track.artists[0].name}
+                                    id={content.track?.id}
+                                    imageDescription={content.track?.name}
+                                    artist={content.track?.artists[0]?.name}
                                     imageUrl={
                                         content.track?.album?.images &&
                                         content.track?.album?.images[0]?.url
@@ -44,7 +43,7 @@ export default function UserIndicationsScreen({
                                 />
                             </React.Fragment>
                         ))}
-                    </section>
+                    </Carroussel>
                 </section>
             </If>
             <If test={artistContent != null && artistContent.items.length > 0}>
@@ -52,7 +51,7 @@ export default function UserIndicationsScreen({
                     <span className="content-label">
                         Artistas buscados recentemente
                     </span>
-                    <section className="content-list">
+                    <Carroussel>
                         {artistContent?.items?.map((content, idx) => (
                             <React.Fragment key={`artists-search-list-${idx}`}>
                                 <BadgeButton
@@ -66,7 +65,7 @@ export default function UserIndicationsScreen({
                                 />
                             </React.Fragment>
                         ))}
-                    </section>
+                    </Carroussel>
                 </section>
             </If>
         </>

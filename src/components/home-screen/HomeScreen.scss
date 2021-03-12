@@ -1,6 +1,11 @@
 @import '../../assets/styles/variables.scss';
 .home-screen {
-    padding: 3em;
+    padding: {
+        left: 3em;
+        right: 3em;
+        top: 3em;
+        bottom: 10em;
+    }
     .header {
         padding-top: 1em;
     }
@@ -22,13 +27,6 @@
             font-size: $mediumFontSize;
             margin-bottom: 1em;
             font-weight: bold;
-        }
-        .content-list {
-            display: flex;
-            width: 100%;
-            flex-wrap: nowrap;
-            overflow: hidden;
-            overflow-x: hidden;
         }
     }
 }

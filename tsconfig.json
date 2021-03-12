@@ -2,7 +2,7 @@
     "compilerOptions": {
         "jsx": "react",
         "module": "commonjs",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "outDir": "./dist/static",
         "esModuleInterop": true,
         "preserveConstEnums": true,

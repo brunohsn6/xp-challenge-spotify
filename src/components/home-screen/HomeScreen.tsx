@@ -6,7 +6,6 @@ import SpotifyService, {
     IRecentlyPlayedTrack,
     ISearch,
     ISearchAll,
-    ITrack,
 } from '../../core/services/SpotifyService';
 import { Timers } from '../../utils/Timers';
 import SearchScreen from './SearchScreen';
@@ -16,6 +15,7 @@ import { Redirect } from 'react-router';
 import StringUtils from '../../utils/StringUtils';
 import { connect } from 'react-redux';
 import { playMusic } from '../../store/action';
+import CONSTANTS from '../../constants';
 class InternalState {
     public searchInput: string;
     public searchValue: string;
@@ -65,14 +65,14 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
         });
     }
     private async search(): Promise<void> {
-        console.log(this.state.content)
+        console.log(this.state.content);
         const content = await this.spotifyService.search(
             this.state.searchValue,
         );
         if (content) {
             this.setState({ content: content });
         }
-        console.log(this.state.content)
+        console.log(this.state.content);
     }
     private handleAlbumClick(albumId: string) {
         history.pushState({}, 'Home', `/album/${albumId}`);
@@ -80,11 +80,17 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
     }
     private handleTrackClick(trackId: string) {
         let preview_url = null;
-        if (this.state?.content != null && !StringUtils.isNullOrEmpty(this.state.searchValue)) {
-            preview_url = this.state.content.tracks.items.find(track => track.id == trackId)?.preview_url;
-        }
-        else {
-            preview_url = this.state.usersContent.tracks.items.find(track => track.track.id == trackId)?.track.preview_url;
+        if (
+            this.state?.content != null &&
+            !StringUtils.isNullOrEmpty(this.state.searchValue)
+        ) {
+            preview_url = this.state.content.tracks.items.find(
+                track => track.id == trackId,
+            )?.preview_url;
+        } else {
+            preview_url = this.state.usersContent.tracks.items.find(
+                track => track.track.id == trackId,
+            )?.track.preview_url;
         }
         this.props.playMusic(preview_url, [preview_url]);
     }
@@ -137,6 +143,7 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
     }
 }
 const mapDispatchToProps = (dispatch: any) => ({
-    playMusic: (music: string, playlist: string[]) => dispatch(playMusic(music, playlist))
-})
+    playMusic: (music: string, playlist: string[]) =>
+        dispatch(playMusic(music, playlist)),
+});
 export default connect(null, mapDispatchToProps)(HomeScreen);

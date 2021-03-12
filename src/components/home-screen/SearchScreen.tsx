@@ -9,6 +9,7 @@ import {
     BadgeButton,
     EBadgeType,
 } from '../common/buttons/badge-button/BadgeButton';
+import { Carroussel } from '../carroussel/Carroussel';
 interface ISearchScreenProps {
     searchValue: string;
     albumContent: ISearch<IAlbum>;
@@ -32,7 +33,7 @@ export default function SearchScreen({
             <span className="searched-value">{`Resultados encontrados para "${searchValue}"`}</span>
             <section className="content">
                 <span className="content-label">Álbums</span>
-                <section className="content-list">
+                <Carroussel>
                     {albumContent.items.map((content, idx) => (
                         <React.Fragment key={`albuns-search-list-${idx}`}>
                             <BadgeButton
@@ -45,11 +46,11 @@ export default function SearchScreen({
                             />
                         </React.Fragment>
                     ))}
-                </section>
+                </Carroussel>
             </section>
             <section className="content">
                 <span className="content-label">Artistas</span>
-                <section className="content-list">
+                <Carroussel>
                     {artistContent.items.map((content, idx) => (
                         <React.Fragment key={`artists-search-list-${idx}`}>
                             <BadgeButton
@@ -60,11 +61,11 @@ export default function SearchScreen({
                             />
                         </React.Fragment>
                     ))}
-                </section>
+                </Carroussel>
             </section>
             <section className="content">
                 <span className="content-label">Músicas</span>
-                <section className="content-list">
+                <Carroussel>
                     {trackContent.items.map((content, idx) => (
                         <React.Fragment key={`tracks-search-list-${idx}`}>
                             <BadgeButton
@@ -76,7 +77,7 @@ export default function SearchScreen({
                             />
                         </React.Fragment>
                     ))}
-                </section>
+                </Carroussel>
             </section>
         </>
     );

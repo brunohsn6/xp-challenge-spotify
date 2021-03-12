@@ -1,6 +1,24 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Webpack = require('webpack');
+const fs = require('fs');
+
+function getConfigs() {
+  let modeIdx = process.argv.findIndex(value => value === '--mode');
+  const mode = process.argv[++modeIdx];
+  const fileEnvPath = path.join(__dirname, 'configs', `${mode}.js`);
+
+  if (mode != '' && fs.existsSync(fileEnvPath)) {
+    console.info(`[INF] Environment mode: ${mode}`);
+    return require(fileEnvPath);
+  } else {
+    throw new Error(
+      "The informed mode type doesn't have an environment configuration. Check if configs folder has the configuration file to the requested mode.",
+    );
+  }
+}
+const configs = getConfigs();
 
 module.exports = {
   entry: './src/index.tsx',
@@ -53,6 +71,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: './src/assets/styles/App.scss',
+    }),
+    new Webpack.DefinePlugin({
+      ...configs,
     }),
   ],
 };

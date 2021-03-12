@@ -1,0 +1,43 @@
+@import '../../assets/styles/variables.scss';
+.content-list {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    .slider {
+        display: flex;
+        overflow: hidden;
+        scroll-behavior: smooth;
+    }
+    .skipper-left,
+    .skipper-right {
+        margin: 0;
+        background-color: $musicBarBlack;
+        width: 3em;
+        &:disabled {
+            background-color: $titleGrey;
+            opacity: 0.5;
+        }
+        .arrow-left,
+        .arrow-right {
+            border: solid $white;
+            margin-right: 1em;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+        }
+    }
+    .skipper-left {
+        border-radius: 0.8em 0em 0em 0.8em;
+        .arrow-left {
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+        }
+    }
+    .skipper-right {
+        border-radius: 0em 1em 1em 0em;
+        .arrow-right {
+            transform: rotate(315deg);
+            -webkit-transform: rotate(315deg);
+        }
+    }
+}
