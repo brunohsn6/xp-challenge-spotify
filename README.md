@@ -20,7 +20,7 @@ XP challenge of spotify application development
 - List musics of an album
 - Play music preview
 
-> note: The Spotify Token must contain 'user-top-read', 'user-read-recently-played' 'user-read-private' on its scope. For more info about token scopes, see Spotify API Doc.
+> note: The Spotify Token must contain 'user-top-read', 'user-read-recently-played' and 'user-read-private' on its scope. For more info about token scopes, see Spotify API Doc.
 
 [Spotify API Doc](https://developer.spotify.com/documentation/web-api/reference/)
 [Spotify API - Scope](https://developer.spotify.com/documentation/general/guides/authorization-guide/#list-of-scopes)
