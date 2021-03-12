@@ -15,21 +15,24 @@ import { Redirect } from 'react-router';
 import StringUtils from '../../utils/StringUtils';
 import { connect } from 'react-redux';
 import { playMusic } from '../../store/action';
-import CONSTANTS from '../../constants';
+import HomeScreenSkeleton from './home-screen-skeleton/HomeScreenSkeleton';
 class InternalState {
     public searchInput: string;
     public searchValue: string;
     public content: ISearchAll;
+    public redirect: string;
+    public isLoading: boolean;
     public usersContent: {
         tracks: ISearch<IRecentlyPlayedTrack>;
         artists: ISearch<IArtist>;
     };
-    redirect: string;
+
     constructor() {
         this.searchInput = '';
         this.searchValue = '';
         this.content = null;
         this.redirect = null;
+        this.isLoading = true;
         this.usersContent = { tracks: null, artists: null };
     }
 }
@@ -53,10 +56,11 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
         const userTracks = await this.spotifyService.getUsersRecentlyPlayedTracks();
         this.setState({
             usersContent: { tracks: userTracks, artists: userArtists },
+            isLoading: false,
         });
     }
     private handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ searchInput: event.target.value });
+        this.setState({ searchInput: event.target.value, isLoading: true });
         this.timer.execOnce(1000, () => {
             this.setState({ searchValue: this.state.searchInput });
             this.search();
@@ -67,7 +71,9 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
             this.state.searchValue,
         );
         if (content) {
-            this.setState({ content: content });
+            this.setState({ content: content, isLoading: false });
+        } else {
+            this.setState({ isLoading: false });
         }
     }
     private handleAlbumClick(albumId: string, artist: string) {
@@ -110,6 +116,7 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
                 </section>
                 <If
                     test={
+                        !this.state.isLoading &&
                         this.state.content != null &&
                         !StringUtils.isNullOrEmpty(this.state.searchValue)
                     }
@@ -125,8 +132,9 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
                 </If>
                 <If
                     test={
-                        this.state.content == null ||
-                        StringUtils.isNullOrEmpty(this.state.searchValue)
+                        !this.state.isLoading &&
+                        (this.state.content == null ||
+                            StringUtils.isNullOrEmpty(this.state.searchValue))
                     }
                 >
                     <UserIndicationsScreen
@@ -134,6 +142,9 @@ class HomeScreen extends Component<IHomeScreenProps, InternalState> {
                         artistContent={this.state.usersContent?.artists}
                         handleTrackClick={this.handleTrackClick}
                     />
+                </If>
+                <If test={this.state.isLoading}>
+                    <HomeScreenSkeleton />
                 </If>
             </div>
         );

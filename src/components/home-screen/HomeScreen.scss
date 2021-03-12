@@ -16,11 +16,12 @@
     }
     .content {
         display: flex;
-        height: 12em;
+        height: 17em;
         flex-direction: row;
         flex-wrap: wrap;
         padding-top: 3em;
         padding-bottom: 3em;
+        overflow: unset !important;
         .content-label {
             display: flex;
             width: 100%;

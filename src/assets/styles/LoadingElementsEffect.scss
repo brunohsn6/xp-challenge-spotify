@@ -1,0 +1,22 @@
+@import './variables.scss';
+.skeleton {
+    display: flex;
+    width: 100%;
+    background-color: $lightGrey;
+    border-radius: 20px;
+    margin-bottom: 0.8em;
+    animation-name: --fading;
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
+}
+@keyframes --fading {
+    0% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.4;
+    }
+}

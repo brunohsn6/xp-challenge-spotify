@@ -1,0 +1,17 @@
+@import '../../../assets/styles/variables.scss';
+@import '../../../assets/../assets/styles/LoadingElementsEffect.scss';
+.content {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    .empty-title {
+        width: 20em;
+        height: 1em;
+    }
+    .empty-contents {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+}

@@ -11,7 +11,6 @@ export function Carroussel(props): JSX.Element {
         setScrollSkipWidth(sliderRef.current.offsetWidth);
     }, []);
     const slide = (direction: 0 | 1) => {
-        debugger;
         if (sliderRef && sliderRef.current != undefined) {
             const scrollWidth = sliderRef.current.scrollWidth;
             let scrollTo = 0;

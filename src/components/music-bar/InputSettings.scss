@@ -2,12 +2,12 @@ $slider-width-number: 400;
 $slider-width: #{$slider-width-number}px;
 $slider-height: 0.4em;
 $background-slider: #c7c7c7;
-$background-filled-slider: #97d700;
+$background-filled-slider: $green;
 $thumb-width: 0.37em;
 $thumb-height: 0.37em;
 $thumb-radius: 5em;
-$thumb-background: #97d700;
-$thumb-border: 1px solid #97d700;
+$thumb-background: $green;
+$thumb-border: 1px solid $green;
 $shadow-size: 0em;
 $fit-thumb-in-slider: 0em;
 @function makelongshadow($color, $size) {

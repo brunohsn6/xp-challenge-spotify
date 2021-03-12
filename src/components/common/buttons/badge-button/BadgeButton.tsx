@@ -6,6 +6,7 @@ export enum EBadgeType {
     ARTIST = 'E_ARTIST',
     ALBUM = 'E_ALBUM',
     TRACK = 'E_TRACK',
+    MOCK = 'E_MOCK',
 }
 interface IBadgeButton {
     id: string;
@@ -32,6 +33,8 @@ export function BadgeButton({
             defaultImage = ' default-album';
         } else if (type == EBadgeType.ARTIST) {
             defaultImage = ' default-artist';
+        } else if (type == EBadgeType.MOCK) {
+            defaultImage = ' skeleton';
         } else {
             defaultImage = ' default-track';
         }
@@ -51,7 +54,9 @@ export function BadgeButton({
                     }}
                 />
                 <span
-                    className="desc"
+                    className={`desc${
+                        type == EBadgeType.MOCK ? ' skeleton' : ''
+                    }`}
                     onClick={() => {
                         handleClick && handleClick(id);
                     }}
