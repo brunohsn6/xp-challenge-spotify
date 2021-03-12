@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-    IArtist,
-    IRecentlyPlayedTrack,
-    ISearch,
-} from '../../core/services/SpotifyService';
 import If from '../../utils/If';
 import {
     BadgeButton,
     EBadgeType,
 } from '../common/buttons/badge-button/BadgeButton';
 import { Carroussel } from '../carroussel/Carroussel';
+import { IArtist, IRecentlyPlayedTrack, ISearch } from '../../core/models/ISpotifyResponse';
 interface IUserIndicationsScreenProps {
     tracksContent: ISearch<IRecentlyPlayedTrack>;
     artistContent: ISearch<IArtist>;

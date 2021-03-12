@@ -1,18 +1,15 @@
 import moment from 'moment';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { playMusic, setMusicState } from '../../store/action';
-import SpotifyService, {
-    IAlbum,
-    ISearch,
-    ITrack,
-} from '../../core/services/SpotifyService';
+import { playMusic } from '../../store/action';
+import SpotifyService from '../../core/services/SpotifyService';
 import If from '../../utils/If';
 import {
     BadgeButton,
     EBadgeType,
 } from '../common/buttons/badge-button/BadgeButton';
 import './AlbumScreen.scss';
+import { IAlbum, ISearch, ITrack } from '../../core/models/ISpotifyResponse';
 class InternalState {
     tracks: ISearch<ITrack>;
     album: IAlbum;
@@ -90,11 +87,10 @@ class AlbumScreen extends Component<IAlbumScreenProps, InternalState> {
                             {this.state?.tracks?.items.map((track, idx) => (
                                 <li
                                     key={`track-list-${idx}`}
-                                    className={`track-item${
-                                        this.isPlaying(track.preview_url)
-                                            ? ' playing'
-                                            : ''
-                                    }`}
+                                    className={`track-item${this.isPlaying(track.preview_url)
+                                        ? ' playing'
+                                        : ''
+                                        }`}
                                     onClick={() =>
                                         this.playFromList(track.preview_url)
                                     }

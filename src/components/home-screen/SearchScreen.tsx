@@ -1,15 +1,10 @@
 import React from 'react';
 import {
-    IAlbum,
-    IArtist,
-    ISearch,
-    ITrack,
-} from '../../core/services/SpotifyService';
-import {
     BadgeButton,
     EBadgeType,
 } from '../common/buttons/badge-button/BadgeButton';
 import { Carroussel } from '../carroussel/Carroussel';
+import { IAlbum, IArtist, ISearch, ITrack } from '../../core/models/ISpotifyResponse';
 interface ISearchScreenProps {
     searchValue: string;
     albumContent: ISearch<IAlbum>;

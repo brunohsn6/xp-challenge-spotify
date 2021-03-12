@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { Input, InputType } from '../common/input-components/Input';
 import './HomeScreen.scss';
-import SpotifyService, {
-    IArtist,
-    IRecentlyPlayedTrack,
-    ISearch,
-    ISearchAll,
-} from '../../core/services/SpotifyService';
+import SpotifyService from '../../core/services/SpotifyService';
 import { Timers } from '../../utils/Timers';
 import SearchScreen from './SearchScreen';
 import UserIndicationsScreen from './UserIndicationsScreen';
@@ -16,6 +11,7 @@ import StringUtils from '../../utils/StringUtils';
 import { connect } from 'react-redux';
 import { playMusic } from '../../store/action';
 import HomeScreenSkeleton from './home-screen-skeleton/HomeScreenSkeleton';
+import { IArtist, IRecentlyPlayedTrack, ISearch, ISearchAll } from '../../core/models/ISpotifyResponse';
 class InternalState {
     public searchInput: string;
     public searchValue: string;

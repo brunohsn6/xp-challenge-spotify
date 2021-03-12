@@ -46,17 +46,21 @@ export function BadgeButton({
     return (
         <>
             <section className={`desc-section${big ? ' big' : ''}`}>
-                <img
-                    className={`img${getConditionalClassForImage()}${getCondicionalClassForEffect()}`}
-                    {...(imageUrl != null ? { src: imageUrl } : {})}
-                    onClick={() => {
-                        handleClick && handleClick(id);
-                    }}
-                />
+                <If test={type == EBadgeType.MOCK}>
+                    <div className={`img${getConditionalClassForImage()}`} />
+                </If>
+                <If test={type != EBadgeType.MOCK}>
+                    <img
+                        className={`img${getConditionalClassForImage()}${getCondicionalClassForEffect()}`}
+                        {...(imageUrl != null ? { src: imageUrl } : {})}
+                        onClick={() => {
+                            handleClick && handleClick(id);
+                        }}
+                    />
+                </If>
                 <span
-                    className={`desc${
-                        type == EBadgeType.MOCK ? ' skeleton' : ''
-                    }`}
+                    className={`desc${type == EBadgeType.MOCK ? ' skeleton' : ''
+                        }`}
                     onClick={() => {
                         handleClick && handleClick(id);
                     }}

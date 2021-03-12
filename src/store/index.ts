@@ -15,7 +15,7 @@ function reducer(state = INITIAL_STATE, action: any): IGlobalReducer{
     switch(action.type){
         case 'SET_MUSIC_TO_PLAY':
             return { ...state, currPlaying: action.currPlaying, playlist: action.playlist, isPlaying: action.isPlaying }
-        case 'PLAY_MUSIC':
+        case 'SET_MUSIC_STATE':
             return { ...state, isPlaying: action.isPlaying}
         default:
             return state;

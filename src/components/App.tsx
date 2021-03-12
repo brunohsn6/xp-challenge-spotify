@@ -15,7 +15,6 @@ import {
     Next,
 } from 'react-router-guards/dist/types';
 import AuthenticationService from '../core/services/AuthenticationService';
-
 const requireLogin = (
     to: GuardToRoute,
     from: GuardFunctionRouteProps | null,

@@ -10,7 +10,7 @@ export function playMusic(currPlaying: string, playlist: string[]){
 }
 export function setMusicState(isPlaying: boolean){
     return {
-        type: 'PLAY_MUSIC',
+        type: 'SET_MUSIC_STATE',
         isPlaying
     }
 }

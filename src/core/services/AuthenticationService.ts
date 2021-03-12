@@ -1,44 +1,18 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import Cookies from 'js-cookie';
-import qs from 'querystring';
-const spotifyCredentials ={
-    clientId: 'c1f97b41a2244ebda219d6deb5df9915',
-    secret: "ee14d89aa58f48c5a38f4f93f1d44e5f"
-}
-const spotify_url: string = 'https://accounts.spotify.com';
-interface IToken{
-    access_token: string;
-    expires_in: number;
-    token_type: string;
-}
+import Cookies, { CookieAttributes } from 'js-cookie';
+import StringUtils from '../../utils/StringUtils';
+
 export default class AuthenticationService {
     public authorizeByToken(token: string): void{
-        Cookies.set('authorization', `${token}`, { path: window.location.origin, sameSite: 'strict', secure:true });
-
-    }
-    public async authorize(): Promise<boolean> {
-        const options:AxiosRequestConfig = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa(spotifyCredentials.clientId + ':' + spotifyCredentials.secret)
-            },
-            data: qs.stringify({
-                'grant_type':'client_credentials',
-                'scope':'user-read-recently-played'
-            }),
-            method: 'post'
-
+        const cookieParams : CookieAttributes = { path: window.location.origin, sameSite: 'strict', secure: true };
+        if(!StringUtils.isLocalhost(window.location.origin)){
+            Cookies.set('authorization', `${token}`, cookieParams);
         }
-        try {
-            const res: IToken = (await axios(`${spotify_url}/api/token`, options)).data;
-            Cookies.set('authorization', `${res.access_token}`, { expires: res.expires_in, path: window.location.origin, sameSite: 'strict', secure:true });
-            return true;
-        } catch (e) {
-            return false;
+        else{
+            Cookies.set('authorization', `${token}`);
         }
     }
     public static isAuthenticated(): boolean{
-        const authToken = Cookies.get("authorization");
+        const authToken = Cookies.get('authorization');
         return authToken != null && authToken != "";
     }
 }
